@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Tabs from '../components/survey/Tabs.vue'
+import Tabs from '~/components/survey/Tabs.vue'
 
 const tabs = [
   { label: 'Параметры', link: 'survey-parameters' },

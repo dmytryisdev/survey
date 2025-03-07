@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import Sidebar from '../components/app/Sidebar.vue'
+import Sidebar from '~/components/app/Sidebar.vue'
 
 const route = useRoute()
 const title = computed(() => {
