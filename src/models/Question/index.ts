@@ -1,13 +1,9 @@
-interface Answer {
-  id: string; // ID ответа
-  text: string; // Текст ответа
-  nextQuestionId?: string; // ID следующего вопроса (если есть)
-}
+import type AnswerModel from "~/models/Answer";
 
 export default class QuestionModel {
   id: string;
   text: string;
-  answers: Answer[]; // Варианты ответов
+  answers: AnswerModel[];
 
   constructor(data: Partial<QuestionModel> = {}) {
       this.id = data.id || '';
@@ -19,16 +15,11 @@ export default class QuestionModel {
       return new QuestionModel({
           id: data.id,
           text: data.text,
-          answers: data.answers?.map((answer: Answer) => ({
+          answers: data.answers?.map((answer: AnswerModel) => ({
               id: answer.id,
               text: answer.text,
               nextQuestionId: answer.nextQuestionId
           })) || []
       });
-  }
-
-  // Добавляет ответ в вопрос
-  addAnswer(answer: Answer): void {
-      this.answers.push(answer);
   }
 }
