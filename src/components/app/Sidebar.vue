@@ -35,8 +35,8 @@ const items = [
       class="sidebar h-full p-6 absolute inset-0 z-1 bg-white sm:w-68 sm:static sm:border-r-2 sm:border-r-gray-100"
     >
       <div
+        class="mb-8 sm:hidden"
         @click="toggleHidden"
-        class="sm:hidden mb-8"
       >Назад</div>
       <section class="sidebar-user flex gap-3 mb-11">
         <Avatar class="side-user__image" size="xlarge"/>

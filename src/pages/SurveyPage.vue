@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const list = ref([
   { id: 123, name: 'Название опроса' },
@@ -13,31 +16,36 @@ const list = ref([
 ])
 
 const handleRemove = (id: number) => {
-  list.value = list.value.filter((item) => item.id !== id)
+  list.value = list.value.filter(item => item.id !== id)
 }
 </script>
 
 <template>
-  <div>
-    <h2 class="mb-10 text-3xl font-bold">Опросы</h2>
-  </div>
   <ul>
     <li
       v-for="item in list"
       :key="item.id"
-      class="flex items-center justify-between p-3 border-b-2 border-b-gray-100"
+      class="border-b-2 border-b-gray-100"
     >
-      <span>{{ item.name }}</span>
-      <div class="flex items-center justify-between gap-4">
-        <span>Редактировать</span>
-        <button @click="() => handleRemove(item.id)">Удалить</button>
-      </div>
+      <RouterLink
+        :to="{ name: 'survey-parameters', params: { id: item.id } }"
+        class="flex items-center justify-between p-3"
+      >
+        <span>{{ item.name }}</span>
+        <div class="flex items-center justify-between gap-4">
+          <button
+            class="cursor-pointer"
+            @click.prevent="router.push({ name: 'survey-parameters', params: { id: item.id } })"
+          >Редактировать</button>
+          <button
+            class="cursor-pointer"
+            @click.prevent="handleRemove(item.id)"
+          >Удалить</button>
+        </div>
+      </RouterLink>
     </li>
   </ul>
-
 </template>
-
-
 
 <style scoped>
 
