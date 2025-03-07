@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute } from 'vue-router';
 
 defineProps<{
   data: {
-    label: string
-    link: string
-  }[]
-}>()
+    label: string;
+    link: string;
+  }[];
+}>();
 
-const route = useRoute()
+const route = useRoute();
 </script>
 
 <template>
@@ -19,14 +19,11 @@ const route = useRoute()
       :class="{ 'bg-sky-100': tab.link === route.name }"
       class="flex-1 text-center"
     >
-      <RouterLink
-        :to="{ name: tab.link }"
-        class="flex justify-center w-full h-full  py-3"
-      >{{ tab.label }}</RouterLink>
+      <RouterLink :to="{ name: tab.link }" class="flex justify-center w-full h-full py-3">
+        {{ tab.label }}
+      </RouterLink>
     </li>
   </ul>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -5,7 +5,7 @@ import RoutesBlacklist from './routes-blacklist.ts';
 const routes = [
   {
     path: '/',
-    component: () => import('../layouts/DefaultLayout.vue'),
+    component: () => import('~/layouts/DefaultLayout.vue'),
     children: [
       ...RoutesSurvey,
       ...RoutesUsers,

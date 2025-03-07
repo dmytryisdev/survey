@@ -2,7 +2,7 @@ export default [
   {
     path: 'survey',
     name: 'survey',
-    component: () => import('../pages/SurveyPage.vue'),
+    component: () => import('~/pages/SurveyPage.vue'),
     meta: {
       title: 'Опросы',
     },
@@ -14,7 +14,7 @@ export default [
       {
         path: 'parameters',
         name: 'survey-parameters',
-        component: () => import('../pages/survey/SurveyParametersPage.vue'),
+        component: () => import('~/pages/survey/SurveyParametersPage.vue'),
         meta: {
           title: 'Параметры',
         }
@@ -22,7 +22,7 @@ export default [
       {
         path: 'questions',
         name: 'survey-questions',
-        component: () => import('../pages/survey/SurveyQuestionsPage.vue'),
+        component: () => import('~/pages/survey/SurveyQuestionsPage.vue'),
         meta: {
           title: 'Вопросы',
         }
@@ -30,7 +30,7 @@ export default [
       {
         path: 'logic',
         name: 'survey-logic',
-        component: () => import('../pages/survey/SurveyLogicPage.vue'),
+        component: () => import('~/pages/survey/SurveyLogicPage.vue'),
         meta: {
           title: 'Логика',
         }
@@ -38,7 +38,7 @@ export default [
       {
         path: 'conditions',
         name: 'survey-conditions',
-        component: () => import('../pages/survey/SurveyConditionsPage.vue'),
+        component: () => import('~/pages/survey/SurveyConditionsPage.vue'),
         meta: {
           title: 'Условия',
         }
@@ -46,7 +46,7 @@ export default [
       {
         path: 'respondents',
         name: 'survey-respondents',
-        component: () => import('../pages/survey/SurveyRespondentsPage.vue'),
+        component: () => import('~/pages/survey/SurveyRespondentsPage.vue'),
         meta: {
           title: 'Респонденты',
         }
