@@ -1,8 +1,8 @@
 import { createApp } from 'vue'
 import PrimeVue from 'primevue/config'
 import Aura from '@primeuix/themes/aura'
-import './assets/styles/index.css'
-import router from './router/index.ts'
+import '~/assets/styles/index.css'
+import router from '~/router/index.ts'
 import App from './App.vue'
 
 const app = createApp(App)
@@ -12,7 +12,7 @@ app.use(PrimeVue, {
     preset: Aura,
     options: {
       prefix: 'p',
-      darkModeSelector: 'system',
+      darkModeSelector: false,
       cssLayer: false
     }
   }

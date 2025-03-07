@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <RouterView />
+  *Users*
 </template>
 
 <style scoped>
