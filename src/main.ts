@@ -4,6 +4,7 @@ import Aura from '@primeuix/themes/aura'
 import '~/assets/styles/index.css'
 import router from '~/router/index.ts'
 import App from './App.vue'
+import 'primeicons/primeicons.css';
 
 const app = createApp(App)
 app.use(router)
