@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <RouterView />
+  *blacklist*
 </template>
 
 <style scoped>
