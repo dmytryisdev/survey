@@ -42,7 +42,11 @@ const handleSaveQuestion = (question: QuestionModel) => {
 </script>
 
 <template>
-  <button @click="createQuestion">Добавить вопрос</button>
+  <div class="flex justify-between items-center p-3">
+    <span class="font-bold">Вопрос</span>
+    <button class="text-left font-bold cursor-pointer" @click="createQuestion">Добавить вопрос</button>
+  </div>
+
   <ul>
     <li
       v-for="(question, index) in questions"
@@ -50,7 +54,7 @@ const handleSaveQuestion = (question: QuestionModel) => {
       class="flex justify-between items-center p-3 border-b-2 border-b-gray-100"
     >
       <span>{{ index + 1 }}. {{ question.text }}</span>
-      <button @click="editQuestion(question)">Редактировать</button>
+      <button class="cursor-pointer" @click="editQuestion(question)">Редактировать</button>
     </li>
   </ul>
   <QuestionModal v-model="showModal" :question="editingQuestion" @save-question="handleSaveQuestion" />

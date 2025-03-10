@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@primeuix/themes": "^1.0.0",
+    "@primevue/forms": "^4.3.1",
+    "@primevue/themes": "^4.3.1",
     "@tailwindcss/vite": "^4.0.10",
     "@vueuse/core": "^12.8.2",
     "primeicons": "^7.0.0",

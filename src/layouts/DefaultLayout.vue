@@ -20,7 +20,9 @@ const toggleSidebarHidden = () => {
     <button
       class="absolute t-2 l-2 z-0 sm:hidden"
       @click="toggleSidebarHidden"
-    >Toggle</button>
+    >
+      Toggle
+    </button>
 
     <Sidebar v-model="isSidebarHidden"/>
 

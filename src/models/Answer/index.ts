@@ -1,4 +1,3 @@
-
 export default class AnswerModel {
   id: string;
   text: string;

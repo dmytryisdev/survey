@@ -32,14 +32,16 @@ const items = [
     <aside
       v-show="!isMobile || !isHidden"
       :class="sidebarClasses"
-      class="sidebar h-full p-6 absolute inset-0 z-1 bg-white sm:w-68 sm:static sm:border-r-2 sm:border-r-gray-100"
+      class="sidebar h-full p-6 absolute inset-0 z-1 bg-white sm:w-96 sm:static sm:border-r-2 sm:border-r-gray-100"
     >
       <div
         class="mb-8 sm:hidden"
         @click="toggleHidden"
-      >Назад</div>
+      >
+        Назад
+      </div>
       <section class="sidebar-user flex gap-3 mb-11">
-        <Avatar class="side-user__image" size="xlarge"/>
+        <Avatar size="xlarge" />
         <div class="overflow-hidden">
           <p class="truncate font-bold">Иван Иванов</p>
           <p class="truncate font-normal">ivanov@mail.ru</p>
@@ -53,7 +55,9 @@ const items = [
           :class="{ 'bg-sky-100': item.link === route.name }"
           class="p-4 rounded-lg transition duration-100 ease-in-out hover:bg-sky-200"
           @click="toggleHidden"
-        >{{ item.label }}</RouterLink>
+        >
+          {{ item.label }}
+        </RouterLink>
       </section>
     </aside>
   </Transition>
