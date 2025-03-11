@@ -1,15 +1,12 @@
-type RespondentStatus = 'invited' | 'started' | 'completed'
+import UserModel from '../User';
 
-export default class RespondentModel {
-  id: string;
-  fullName: string;
-  email: string;
+export type RespondentStatus = 'invited' | 'started' | 'completed';
+
+export default class RespondentModel extends UserModel {
   status: RespondentStatus | '';
 
   constructor(data: Partial<RespondentModel> = {}) {
-    this.id = data.id || '';
-    this.fullName = data.fullName || '';
-    this.email = data.email || '';
+    super(data);
     this.status = data.status || '';
   }
 }

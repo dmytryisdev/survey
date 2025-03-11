@@ -16,8 +16,16 @@ const initialValues = reactive({
 const resolver = ({ values }: any) => {
   const errors: any = {};
 
-  if (!values.name) {
-    errors.name = [{ message: 'Поле обязательно для заполнения.' }];
+  if (!values.type) {
+    errors.type = [{ message: 'Выберите тип опроса.' }];
+  }
+
+  if (!values.attempts) {
+    errors.attempts = [{ message: 'Поле обязательно для заполнения.' }];
+  }
+
+  if (!values.duration) {
+    errors.duration = [{ message: 'Поле обязательно для заполнения.' }];
   }
 
   return {
@@ -54,6 +62,9 @@ const onFormSubmit = ({ valid, states }: { valid: boolean, states: any }) => {
           <label for="group">Для группы людей</label>
         </div>
       </RadioButtonGroup>
+      <Message v-if="$form.type?.invalid" severity="error" size="small" variant="simple">
+        {{ $form.type.error.message }}
+      </Message>
     </div>
 
     <div class="flex flex-col gap-1">

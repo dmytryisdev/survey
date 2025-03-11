@@ -21,7 +21,7 @@ const toggleHidden = () => {
 }
 
 const items = [
-  { label: 'Опросы', link: 'survey' },
+  { label: 'Опросы', link: 'poll' },
   { label: 'Пользователи', link: 'users' },
   { label: 'Чёрный список', link: 'blacklist' }
 ]

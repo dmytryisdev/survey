@@ -1,6 +1,6 @@
-import QuestionnaireModel from "~/models/QuestionaryModel";
+import PollModel from "~/models/Poll";
 
-const generateQuestionnaire: any = (id: number) => {
+const generatePoll: any = (id: number) => {
   return {
     id: id.toString(),
     title: `Опросник ${id}`,
@@ -50,16 +50,16 @@ const generateQuestionnaire: any = (id: number) => {
   };
 };
 
-export const fetchQuestionnaire = (): Promise<any> => {
-  const questionnaires: any[] = [];
+export const fetchPoll = (): Promise<any> => {
+  const polls: any[] = [];
 
   for (let i = 1; i <= 15; i++) {
-    questionnaires.push(new QuestionnaireModel(generateQuestionnaire(i)));
+    polls.push(new PollModel(generatePoll(i)));
   }
 
   return new Promise(resolve => {
     setTimeout(() => {
-      resolve(questionnaires);
+      resolve(polls);
     }, 1000);
   });
 };

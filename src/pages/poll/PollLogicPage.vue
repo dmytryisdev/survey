@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
 import { ref } from 'vue';
+import LogicModal from '~/components/modal/Logic.vue'
 import QuestionModel from '~/models/Question';
 import AnswerModel from '~/models/Answer';
 import ConnectionModel from '~/models/Connection';
-import Connection from '~/components/survey/logic/Connection.vue';
+import Connection from '~/components/poll/logic/Connection.vue';
 
+const showModal = ref(false);
 const questions = ref<QuestionModel[]>([
   new QuestionModel({
     id: '1',
@@ -52,10 +54,14 @@ const handleChangeAnswer = (answer: AnswerModel, index: number) => {
 const handleChangeNextQuestion = (question: QuestionModel, index: number) => {
   connections.value[index].nextQuestion = question;
 }
+
+const createConnection = () => {
+  showModal.value = true;
+};
 </script>
 
 <template>
-  <Button variant="text">Добавить вопрос в последовательность</Button>
+  <Button variant="text" @click="createConnection">Добавить вопрос в последовательность</Button>
 
   <ul>
     <Connection
@@ -68,6 +74,8 @@ const handleChangeNextQuestion = (question: QuestionModel, index: number) => {
       @change-next-question="question => handleChangeNextQuestion(question, index)"
     />
   </ul>
+
+  <LogicModal v-model="showModal" @add-connection="() => {  }"/>
 </template>
 
 <style scoped>
