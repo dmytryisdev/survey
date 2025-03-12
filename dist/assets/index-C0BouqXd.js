@@ -1,0 +1,1 @@
+var n=Object.defineProperty;var a=(i,e,l)=>e in i?n(i,e,{enumerable:!0,configurable:!0,writable:!0,value:l}):i[e]=l;var s=(i,e,l)=>a(i,typeof e!="symbol"?e+"":e,l);class d{constructor(e={}){s(this,"id");s(this,"fullName");s(this,"email");s(this,"isBanned");this.id=e.id||"",this.fullName=e.fullName||"",this.email=e.email||"",this.isBanned=e.isBanned||!1}}export{d as U};
