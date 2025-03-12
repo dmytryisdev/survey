@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue';
 import type UserModel from '~/models/User';
 import { fetchUsers } from '~/api/Users.ts';
 import Loader from '~/components/app/Loader.vue';
+import Empty from '~/components/app/Empty.vue';
 
 const isLoading = ref(true)
 const list = ref<UserModel[]>([])
@@ -32,6 +33,7 @@ onMounted(() => getBannedUsers());
   </div>
 
   <Loader v-if="isLoading"/>
+  <Empty v-else-if="!list.length"/>
 
   <ul>
     <li

@@ -5,6 +5,7 @@ import PollModel from '~/models/Poll';
 import PollModal from '~/components/modal/Poll.vue';
 import Loader from '~/components/app/Loader.vue';
 import { API_BASE_URL } from '~/config';
+import Empty from '~/components/app/Empty.vue';
 const router = useRouter();
 
 const isLoading = ref(true);
@@ -64,6 +65,7 @@ onMounted(() => getPolls());
   </div>
 
   <Loader v-if="isLoading"/>
+  <Empty v-else-if="!list.length"/>
 
   <ul>
     <li v-for="item in list" :key="item.id" class="border-b-2 border-b-gray-100">

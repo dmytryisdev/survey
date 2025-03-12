@@ -4,9 +4,12 @@ import { useRoute } from 'vue-router';
 import QuestionModal from '~/components/modal/Question.vue';
 import QuestionModel from '~/models/Question';
 import { API_BASE_URL } from '~/config';
+import Loader from '~/components/app/Loader.vue';
+import Empty from '~/components/app/Empty.vue';
 
 const route = useRoute();
 
+const isLoading = ref(true);
 const showModal = ref(false);
 const editingQuestion = ref<QuestionModel | null>(null);
 const questions = ref<QuestionModel[]>([]);
@@ -17,6 +20,8 @@ const getQuestions = async () => {
     questions.value = await response.json();
   } catch (error) {
     console.error(error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -69,6 +74,9 @@ onMounted(() => getQuestions());
     <span class="font-bold">Вопрос</span>
     <button class="text-left font-bold cursor-pointer" @click="createQuestion">Добавить вопрос</button>
   </div>
+
+  <Loader v-if="isLoading"/>
+  <Empty v-else-if="!questions.length"/>
 
   <ul>
     <li

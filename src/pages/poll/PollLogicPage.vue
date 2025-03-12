@@ -10,6 +10,7 @@ import RelationshipModel from '~/models/Relationship';
 import { API_BASE_URL } from '~/config';
 const route = useRoute();
 import Loader from '~/components/app/Loader.vue';
+import Empty from '~/components/app/Empty.vue';
 
 const isLoading = ref(true);
 const showModal = ref(false);
@@ -110,6 +111,8 @@ onMounted( () => getLogicQuestions())
         @change-next-question="(question, questionId: string) => handleChangeNextQuestion(question, questionId)"
       />
     </ul>
+
+    <Empty v-if="!questions.length"/>
 
     <Button class="max-w-104" @click="handleSavePoll">Cохранить изменения</Button>
   </div>

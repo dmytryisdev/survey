@@ -4,6 +4,7 @@ import type UserModel from '~/models/User';
 import { fetchUsers } from '~/api/Users.ts';
 import UserModal from '~/components/modal/User.vue'
 import Loader from '~/components/app/Loader.vue';
+import Empty from '~/components/app/Empty.vue';
 
 const isLoading = ref(true)
 const list = ref<UserModel[]>([])
@@ -41,6 +42,7 @@ onMounted(() => getUsers());
   </div>
 
   <Loader v-if="isLoading"/>
+  <Empty v-else-if="!list.length"/>
 
   <ul>
     <li
