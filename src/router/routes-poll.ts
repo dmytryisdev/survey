@@ -1,6 +1,6 @@
 export default [
   {
-    path: 'survey',
+    path: 'poll',
     name: 'poll',
     component: () => import('~/pages/PollPage.vue'),
     meta: {
@@ -8,7 +8,7 @@ export default [
     },
   },
   {
-    path: '/survey/:id',
+    path: '/poll/:id',
     component: () => import('../layouts/PollLayout.vue'),
     children: [
       {
