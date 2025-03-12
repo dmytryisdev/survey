@@ -2,7 +2,9 @@
 import { onMounted, ref } from 'vue';
 import type UserModel from '~/models/User';
 import { fetchUsers } from '~/api/Users.ts';
+import Loader from '~/components/app/Loader.vue';
 
+const isLoading = ref(true)
 const list = ref<UserModel[]>([])
 
 const getBannedUsers = async () => {
@@ -10,6 +12,8 @@ const getBannedUsers = async () => {
     list.value = await fetchUsers(true);
   } catch (error) {
     console.error(error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -26,6 +30,8 @@ onMounted(() => getBannedUsers());
     <span class="flex-2 font-bold">Email</span>
     <span class="flex-1"></span>
   </div>
+
+  <Loader v-if="isLoading"/>
 
   <ul>
     <li

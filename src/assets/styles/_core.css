@@ -7,6 +7,11 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --p-progressspinner-color-one: oklch(0.705 0.015 286.067) !important;
+  --p-progressspinner-color-two: oklch(0.705 0.015 286.067) !important;
+  --p-progressspinner-color-three: oklch(0.705 0.015 286.067) !important;
+  --p-progressspinner-color-four: oklch(0.705 0.015 286.067) !important;
 }
 
 html, body {
