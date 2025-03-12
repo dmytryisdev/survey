@@ -3,7 +3,6 @@ import { ref } from 'vue';
 import RespondentModal from '~/components/modal/Respondent.vue';
 import RespondentModel from '~/models/Respondent';
 
-// TODO: вынести для общего доступа
 const statusesText = {
   invited: 'Приглашен',
   started: 'Начал прохождение',
