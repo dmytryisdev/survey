@@ -9,6 +9,7 @@ export default defineConfig({
     vue(),
     tailwindcss(),
   ],
+  base: '/survey/',
   resolve: {
     alias: {
       '~': path.resolve(__dirname, 'src'), // Настройка алиаса для src

@@ -32,8 +32,11 @@ const items = [
   <Transition name="slide-left">
     <aside
       v-show="!isMobile || !isHidden"
-      :class="sidebarClasses"
-      class="sidebar h-full p-6 absolute inset-0 z-1 bg-white sm:w-96 sm:static sm:border-r-2 sm:border-r-gray-100"
+      :class="[
+        sidebarClasses,
+        'sidebar h-full p-6 bg-white z-1',
+        isMobile ? 'absolute inset-0' : 'w-96 static border-r-2 border-r-gray-100'
+      ]"
     >
       <div class="sm:hidden">
         <Button
