@@ -3,6 +3,7 @@ import { computed, } from 'vue'
 import { useRoute } from 'vue-router'
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 import Avatar from 'primevue/avatar'
+import Button from 'primevue/button';
 
 const isHidden = defineModel<boolean>({ default: true })
 
@@ -34,11 +35,14 @@ const items = [
       :class="sidebarClasses"
       class="sidebar h-full p-6 absolute inset-0 z-1 bg-white sm:w-96 sm:static sm:border-r-2 sm:border-r-gray-100"
     >
-      <div
-        class="mb-8 sm:hidden"
-        @click="toggleHidden"
-      >
-        Назад
+      <div class="sm:hidden">
+        <Button
+          variant="text"
+          class="mb-8 sm:hidden"
+          @click="toggleHidden"
+        >
+          Назад
+        </Button>
       </div>
       <section class="sidebar-user flex gap-3 mb-11">
         <Avatar size="xlarge" />
