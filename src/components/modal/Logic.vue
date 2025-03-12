@@ -1,37 +1,58 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
 import { Form, type FormSubmitEvent } from '@primevue/forms';
-import Message from 'primevue/message';
-import ConnectionModel from '~/models/Connection';
-import { validateEmail } from '~/utils';
+import RelationshipModel from '~/models/Relationship';
 import Select from 'primevue/select';
 import RadioButton from 'primevue/radiobutton';
+import QuestionModel from '~/models/Question';
+import RadioButtonGroup from 'primevue/radiobuttongroup';
+import Message from 'primevue/message';
 
 const showModal = defineModel<boolean>();
 
-const emit = defineEmits<{ 'add-connection': [connection: ConnectionModel]; }>();
+const { questions } = defineProps<{ questions: QuestionModel[] }>();
+
+const emit = defineEmits<{ 'create-relationship': [relationship: RelationshipModel]; }>();
+
+const selectedQuestion = ref();
+const selectedAnswer = ref();
+const selectedNextQuestion = ref();
+
+const questionsOptions = computed(() => {
+  return questions
+    .map(item => { return { id: item.id, name: item.text, value: item.id } })
+    .filter(item => item.id !== selectedNextQuestion.value?.id);
+});
+
+const questionsNextOptions = computed(() => {
+  return questions
+    .map(item => { return { id: item.id, name: item.text, value: item.id } })
+    .filter(item => item.id !== selectedQuestion.value?.id);
+});
+
+const answersOptions = computed(() => questions.find(question => question.id === selectedQuestion.value.id)!)
 
 const initialValues = reactive({
-  fullName: '',
-  email: '',
+  question: null,
+  answer: null,
+  nextQuestion: null
 })
 
 const resolver = ({ values }: any) => {
   const errors: any = {};
 
-  if (!values.fullName.trim()) {
-    errors.fullName = [{ message: 'Поле обязательно для заполнения.' }];
+  if (!values.question) {
+    errors.question = [{ message: 'Поле обязательно для заполнения.' }];
   }
 
-  if (!values.email.trim()) {
-    errors.email = [{ message: 'Поле обязательно для заполнения.' }];
+  if (!values.answer) {
+    errors.answer = [{ message: 'Поле обязательно для заполнения.' }];
   }
 
-  if (values.email.trim() && !validateEmail(values.email)) {
-    errors.email = [{ message: 'Некорректный адрес электронной почты.' }];
+  if (!values.nextQuestion) {
+    errors.nextQuestion = [{ message: 'Поле обязательно для заполнения.' }];
   }
 
   return {
@@ -43,12 +64,20 @@ const onFormSubmit = ({ valid, states }: FormSubmitEvent) => {
   if (valid) {
     try {
       closeDialog();
-      emit('add-connection', new ConnectionModel({
-        id: Date.now().toString(),
+      emit('create-relationship', new RelationshipModel({
+        question_id: states.question.value.id,
+        answer_id: states.answer.value,
+        next_question_id: states.nextQuestion.value.id,
       }));
     } catch (err) {
       console.error(err);
     }
+  }
+}
+
+const toggleRadioButton = (id: string) => {
+  if (selectedAnswer.value === id) {
+    selectedAnswer.value = null;
   }
 }
 
@@ -63,44 +92,62 @@ const closeDialog = () => {
     :modal="true"
     :style="{ width: '500px' }"
     :closable="false"
-    header="Выберите вопрос, который вы хотите добавить"
+    header="Добавление связи"
   >
     <Form
       v-slot="$form"
       :initialValues
       :resolver
       :validateOnValueUpdate="false"
-      :validateOnBlur="true"
       @submit="onFormSubmit"
       class="flex flex-col gap-4"
     >
-      <Select
-        :options="questionsOptions"
-        optionLabel="name"
-        class="w-104"
-        @change="(e)=> changeNextQuestion(e.value.value)"
-      />
-
-
-      <div class="flex flex-wrap gap-4">
-        <div v-for="answer in connection.question.answers" class="flex items-center gap-2">
-          <RadioButton
-            v-model="selectedAnswer"
-            :inputId="answer.id"
-            :name="connection.id"
-            :value="answer.id"
-            @change="changeAnswer(answer)"
-          />
-          <label :for="connection.id">{{ answer.text }}</label>
-        </div>
+      <div class="flex flex-col gap-2">
+        <label for="question">Выберите вопрос, который вы хотите добавить</label>
+        <Select
+          v-model="selectedQuestion"
+          :options="questionsOptions"
+          name="question"
+          optionLabel="name"
+          fluid
+        />
+        <Message v-if="$form.question?.invalid" severity="error" size="small" variant="simple">
+          {{ $form.question.error.message }}
+        </Message>
       </div>
 
-      <Select
-        :options="questionsOptions"
-        optionLabel="name"
-        class="w-104"
-        @change="(e)=> changeNextQuestion(e.value.value)"
-      />
+      <div v-if="selectedQuestion" class="flex flex-col gap-2">
+        <label for="answer">Следующим для ответа показывать</label>
+        <RadioButtonGroup name="answer" class="flex flex-wrap gap-4">
+          <div v-for="answer in answersOptions.answers" class="flex items-center gap-2">
+            <RadioButton
+              v-model="selectedAnswer"
+              :inputId="'modal' + answer.id"
+              :name="answersOptions.id"
+              :value="answer.id"
+              @click="toggleRadioButton(answer.id)"
+            />
+            <label :for="'modal' + answer.id">{{ answer.text }}</label>
+          </div>
+        </RadioButtonGroup>
+        <Message v-if="$form.answer?.invalid" severity="error" size="small" variant="simple">
+          {{ $form.answer.error.message }}
+        </Message>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <Select
+          v-model="selectedNextQuestion"
+          :options="questionsNextOptions"
+          name="nextQuestion"
+          optionLabel="name"
+          fluid
+        />
+        <Message v-if="$form.nextQuestion?.invalid" severity="error" size="small" variant="simple">
+          {{ $form.nextQuestion.error.message }}
+        </Message>
+      </div>
+
 
       <div class="flex gap-2">
         <Button type="submit" severity="secondary" label="Сохранить" class="flex-1" />
