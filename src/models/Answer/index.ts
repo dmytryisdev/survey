@@ -1,7 +1,9 @@
+import type QuestionModel from '~/models/Question';
+
 export default class AnswerModel {
   id: string;
   text: string;
-  nextQuestion?: string | null;
+  nextQuestion: QuestionModel | null;
   question?: number | null;
 
   constructor(data: Partial<AnswerModel> = {}) {

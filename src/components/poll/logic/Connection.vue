@@ -4,7 +4,6 @@ import type AnswerModel from '~/models/Answer';
 import QuestionModel from '~/models/Question';
 import RadioButton from 'primevue/radiobutton';
 import Select from 'primevue/select';
-import RelationshipModel from '~/models/Relationship';
 
 interface ConnectionProps {
   question: QuestionModel;
@@ -15,12 +14,16 @@ interface ConnectionProps {
 const { question, questions, index } = defineProps<ConnectionProps>();
 
 const emit = defineEmits<{
-  'change-answer': [answer: AnswerModel];
-  'change-next-question': [question: QuestionModel];
+  'change-answer': [answer: AnswerModel, questionId: string];
+  'change-next-question': [question: QuestionModel, questionId: string];
 }>()
 
 const selectedAnswer = ref(question.answers.find(item => item.nextQuestion)?.id);
-const selectedNextQuestion = ref({ id: question.subquestion!.id, name: question.subquestion!.text, value: question.subquestion!.id })
+const selectedNextQuestion = ref({
+  id: question.answers.find(item => item.nextQuestion)!.nextQuestion!.id,
+  name: question.answers.find(item => item.nextQuestion)!.nextQuestion!.text,
+  value: question.answers.find(item => item.nextQuestion)!.nextQuestion!.id
+})
 
 const questionsOptions = computed(() => {
   return questions
@@ -28,13 +31,13 @@ const questionsOptions = computed(() => {
     .filter(item => item.id !== question.id)
 });
 
-const changeAnswer = (answer: AnswerModel) => {
-  emit('change-answer', answer);
+const changeAnswer = (answer: AnswerModel, questionId: string) => {
+  emit('change-answer', answer, questionId);
 };
 
-const changeNextQuestion = (questionId: string) => {
-  const question = questions.find(q => q.id === questionId)
-  emit('change-next-question', question!);
+const changeNextQuestion = (nextQuestionId: string, questionId: string) => {
+  const question = questions.find(q => q.id === nextQuestionId)
+  emit('change-next-question', question!, questionId);
 };
 </script>
 
@@ -49,7 +52,7 @@ const changeNextQuestion = (questionId: string) => {
           :inputId="answer.id"
           :name="question.id"
           :value="answer.id"
-          @change="changeAnswer(answer)"
+          @change="changeAnswer(answer, question.id)"
         ></RadioButton>
         <label :for="answer.id">{{ answer.text }}</label>
       </div>
@@ -60,7 +63,7 @@ const changeNextQuestion = (questionId: string) => {
       :options="questionsOptions"
       optionLabel="name"
       class="w-104"
-      @change="(e)=> changeNextQuestion(e.value.value)"
+      @change="(e)=> changeNextQuestion(e.value.value, question.id)"
     />
   </li>
 </template>

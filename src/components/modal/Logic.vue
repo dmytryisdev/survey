@@ -12,7 +12,10 @@ import Message from 'primevue/message';
 
 const showModal = defineModel<boolean>();
 
-const { questions } = defineProps<{ questions: QuestionModel[] }>();
+const { questions, filteredQuestions } = defineProps<{
+  questions: QuestionModel[],
+  filteredQuestions: QuestionModel[],
+}>();
 
 const emit = defineEmits<{ 'create-relationship': [relationship: RelationshipModel]; }>();
 
@@ -22,8 +25,9 @@ const selectedNextQuestion = ref();
 
 const questionsOptions = computed(() => {
   return questions
-    .map(item => { return { id: item.id, name: item.text, value: item.id } })
-    .filter(item => item.id !== selectedNextQuestion.value?.id);
+    .filter(item => item.id !== selectedNextQuestion.value?.id)
+    .filter(item => !filteredQuestions.includes(item))
+    .map(item => { return { id: item.id, name: item.text, value: item.id } });
 });
 
 const questionsNextOptions = computed(() => {
@@ -69,6 +73,7 @@ const onFormSubmit = ({ valid, states }: FormSubmitEvent) => {
         answer_id: states.answer.value,
         next_question_id: states.nextQuestion.value.id,
       }));
+      resetFields()
     } catch (err) {
       console.error(err);
     }
@@ -84,6 +89,12 @@ const toggleRadioButton = (id: string) => {
 const closeDialog = () => {
   showModal.value = false;
 };
+
+const resetFields = () => {
+  selectedQuestion.value = null;
+  selectedAnswer.value = null;
+  selectedNextQuestion.value = null;
+}
 </script>
 
 <template>

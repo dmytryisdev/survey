@@ -22,10 +22,9 @@ export const fetchLogicQuestions = (): Promise<QuestionModel[]> => {
 
   questions.forEach((question, index) => {
     const nextIndex = (index + 1) % questions.length;
-    const subQuestion = questions[nextIndex];
+    const nextQuestion = questions[nextIndex];
 
-    question.subquestion = subQuestion;
-    question.answers[0].nextQuestion = index % 2 === 0 ? subQuestion.id : null;
+    question.answers[0].nextQuestion = index % 2 === 0 ? nextQuestion : null;
   });
 
   return new Promise(resolve => {
