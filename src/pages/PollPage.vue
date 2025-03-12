@@ -4,7 +4,6 @@ import { useRouter } from 'vue-router';
 import PollModel from '~/models/Poll';
 import PollModal from '~/components/modal/Poll.vue';
 import Loader from '~/components/app/Loader.vue';
-import { API_BASE_URL } from '~/config';
 import Empty from '~/components/app/Empty.vue';
 const router = useRouter();
 
@@ -14,8 +13,7 @@ const list = ref<PollModel[]>([]);
 
 const getPolls = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/polls`)
-    list.value = await response.json();
+    list.value = await PollModel.getPolls();
   } catch (error) {
     console.error(error);
   } finally {
@@ -25,9 +23,7 @@ const getPolls = async () => {
 
 const handleRemove = async (id: string) => {
   try {
-    await fetch(`${API_BASE_URL}/polls/${id}`, {
-      method: 'DELETE',
-    })
+    await PollModel.removePoll(id)
     list.value = list.value.filter(item => item.id !== id);
   } catch (err) {
     console.error(err);
@@ -40,16 +36,7 @@ const createPoll = () => {
 
 const handleCreatePoll = async (poll: PollModel) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/polls`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        title: poll.title
-      }),
-    })
-    list.value = await response.json();
+    list.value = await PollModel.createPoll(poll.title);
   } catch (err) {
     console.error(err);
   }

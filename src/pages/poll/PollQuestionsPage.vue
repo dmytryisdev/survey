@@ -3,7 +3,6 @@ import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import QuestionModal from '~/components/modal/Question.vue';
 import QuestionModel from '~/models/Question';
-import { API_BASE_URL } from '~/config';
 import Loader from '~/components/app/Loader.vue';
 import Empty from '~/components/app/Empty.vue';
 
@@ -16,8 +15,7 @@ const questions = ref<QuestionModel[]>([]);
 
 const getQuestions = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/polls/${route.params.id}/questions`)
-    questions.value = await response.json();
+    questions.value = await QuestionModel.getQuestions(route.params.id as string);
   } catch (error) {
     console.error(error);
   } finally {
@@ -25,13 +23,9 @@ const getQuestions = async () => {
   }
 };
 
-const createQuestion = async () => {
-  try {
-    editingQuestion.value = null;
-    showModal.value = true;
-  } catch (error) {
-    console.error(error);
-  }
+const createQuestion = () => {
+  editingQuestion.value = null;
+  showModal.value = true;
 };
 
 const editQuestion = (question: QuestionModel) => {
@@ -40,33 +34,14 @@ const editQuestion = (question: QuestionModel) => {
 };
 
 const handleSaveQuestion = async (question: QuestionModel) => {
-  let mode;
-  if (question.id) {
-    mode = 'edit';
-    const index = questions.value.findIndex(q => q.id === question.id);
-    if (index !== -1) {
-      questions.value[index] = question;
-    }
-  } else {
-    mode = 'create';
-    question.id = Date.now().toString();
-    questions.value.push(question);
+  try {
+    questions.value = await QuestionModel.saveQuestion(route.params.id as string, question);
+  } catch (error) {
+    console.error(error);
   }
-
-  const response = await fetch(`${API_BASE_URL}/polls/${route.params.id}/questions`, {
-    method: mode === 'create' ? 'POST' : 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      poll: editingQuestion.value!.poll,
-      answers: editingQuestion.value!.answers.map(item => item.text),
-    }),
-  })
-  questions.value = await response.json();
 };
 
-onMounted(() => getQuestions());
+onMounted(() => { getQuestions(); });
 </script>
 
 <template>
@@ -88,6 +63,7 @@ onMounted(() => getQuestions());
       <button class="cursor-pointer" @click="editQuestion(question)">Редактировать</button>
     </li>
   </ul>
+
   <QuestionModal v-model="showModal" :question="editingQuestion" @save-question="handleSaveQuestion" />
 </template>
 

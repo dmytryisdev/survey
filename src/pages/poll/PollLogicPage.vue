@@ -7,10 +7,9 @@ import QuestionModel from '~/models/Question';
 import AnswerModel from '~/models/Answer';
 import Connection from '~/components/poll/logic/Connection.vue';
 import RelationshipModel from '~/models/Relationship';
-import { API_BASE_URL } from '~/config';
-const route = useRoute();
-import Loader from '~/components/app/Loader.vue';
 import Empty from '~/components/app/Empty.vue';
+import Loader from '~/components/app/Loader.vue';
+const route = useRoute();
 
 const isLoading = ref(true);
 const showModal = ref(false);
@@ -22,8 +21,7 @@ const filteredQuestions = computed<QuestionModel[]>(() => {
 
 const getLogicQuestions = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/polls/${route.params.id}/questions`)
-    questions.value = await response.json();
+    questions.value = await QuestionModel.getQuestions(route.params.id as string);
   } catch (error) {
     console.error(error);
   } finally {
@@ -77,15 +75,7 @@ const handleSavePoll = async () => {
         });
       });
 
-    await fetch(`${API_BASE_URL}/polls/${route.params.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        relationships: relationships
-      }),
-    })
+    await RelationshipModel.updateRelationships(route.params.id as string, relationships)
   } catch (err) {
     console.error(err);
   }
