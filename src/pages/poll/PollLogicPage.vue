@@ -7,7 +7,9 @@ import AnswerModel from '~/models/Answer';
 import Connection from '~/components/poll/logic/Connection.vue';
 import { fetchLogicQuestions } from '~/api/Logic.ts';
 import RelationshipModel from '~/models/Relationship';
+import Loader from '~/components/app/Loader.vue';
 
+const isLoading = ref(true);
 const showModal = ref(false);
 const questions = ref<QuestionModel[]>([]);
 
@@ -20,6 +22,8 @@ const getLogicQuestions = async () => {
     questions.value = await fetchLogicQuestions();
   } catch (error) {
     console.error(error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -79,7 +83,9 @@ onMounted( () => getLogicQuestions())
 </script>
 
 <template>
-  <div class="flex flex-col gap-8">
+  <Loader v-if="isLoading"/>
+
+  <div v-else class="flex flex-col gap-8">
     <Button variant="text" class="w-104" @click="createConnection">Добавить вопрос в последовательность</Button>
 
     <ul class="flex flex-col gap-8">

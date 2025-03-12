@@ -3,7 +3,9 @@ import { onMounted, ref } from 'vue';
 import type UserModel from '~/models/User';
 import { fetchUsers } from '~/api/Users.ts';
 import UserModal from '~/components/modal/User.vue'
+import Loader from '~/components/app/Loader.vue';
 
+const isLoading = ref(true)
 const list = ref<UserModel[]>([])
 
 const showModal = ref(false);
@@ -12,6 +14,8 @@ const getUsers = async () => {
     list.value = await fetchUsers();
   } catch (error) {
     console.error(error);
+  }  finally {
+    isLoading.value = false;
   }
 };
 
@@ -35,6 +39,8 @@ onMounted(() => getUsers());
       @click="createUser"
     >Добавить пользователя</button>
   </div>
+
+  <Loader v-if="isLoading"/>
 
   <ul>
     <li

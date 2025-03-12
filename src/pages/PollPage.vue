@@ -4,8 +4,10 @@ import { useRouter } from 'vue-router';
 import { fetchPoll } from '~/api/Poll';
 import PollModel from '~/models/Poll';
 import PollModal from '~/components/modal/Poll.vue';
+import Loader from '~/components/app/Loader.vue';
 const router = useRouter();
 
+const isLoading = ref(true);
 const showModal = ref(false);
 const list = ref<PollModel[]>([]);
 
@@ -14,6 +16,8 @@ const getQuestions = async () => {
     list.value = await fetchPoll();
   } catch (error) {
     console.error(error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -37,6 +41,8 @@ onMounted(() => getQuestions());
     <span class="font-bold">ФИО</span>
     <button class="cursor-pointer font-bold" @click="createPoll">Добавить опрос</button>
   </div>
+
+  <Loader v-if="isLoading"/>
 
   <ul>
     <li v-for="item in list" :key="item.id" class="border-b-2 border-b-gray-100">
