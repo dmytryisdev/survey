@@ -2,7 +2,7 @@ import type AnswerModel from "~/models/Answer";
 
 export default class QuestionModel {
   id: string;
-  poll: number;
+  poll: string;
   text: string;
   answers: AnswerModel[];
   from_answers: AnswerModel[];
@@ -10,7 +10,7 @@ export default class QuestionModel {
 
   constructor(data: Partial<QuestionModel> = {}) {
       this.id = data.id || '';
-      this.poll = data.poll || -1;
+      this.poll = data.poll || '';
       this.text = data.text || '';
       this.answers = data.answers || [];
       this.from_answers = data.from_answers || [];

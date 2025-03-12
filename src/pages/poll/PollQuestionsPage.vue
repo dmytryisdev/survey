@@ -1,26 +1,32 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import QuestionModal from '~/components/modal/Question.vue';
-import AnswerModel from '~/models/Answer';
 import QuestionModel from '~/models/Question';
+import { API_BASE_URL } from '~/config';
+
+const route = useRoute();
 
 const showModal = ref(false);
 const editingQuestion = ref<QuestionModel | null>(null);
-const questions = ref<QuestionModel[]>([
-  new QuestionModel({
-    id: '1',
-    text: 'Как часто вы пользуетесь нашим продуктом?',
-    answers: [
-      new AnswerModel({ id: '1', text: 'Ежедневно' }),
-      new AnswerModel({ id: '2', text: 'Несколько раз в неделю' }),
-      new AnswerModel({ id: '3', text: 'Редко' }),
-    ],
-  }),
-]);
+const questions = ref<QuestionModel[]>([]);
 
-const createQuestion = () => {
-  editingQuestion.value = null;
-  showModal.value = true;
+const getQuestions = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/polls/${route.params.id}/questions`)
+    questions.value = await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const createQuestion = async () => {
+  try {
+    editingQuestion.value = null;
+    showModal.value = true;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const editQuestion = (question: QuestionModel) => {
@@ -28,17 +34,34 @@ const editQuestion = (question: QuestionModel) => {
   showModal.value = true;
 };
 
-const handleSaveQuestion = (question: QuestionModel) => {
+const handleSaveQuestion = async (question: QuestionModel) => {
+  let mode;
   if (question.id) {
+    mode = 'edit';
     const index = questions.value.findIndex(q => q.id === question.id);
     if (index !== -1) {
       questions.value[index] = question;
     }
   } else {
+    mode = 'create';
     question.id = Date.now().toString();
     questions.value.push(question);
   }
+
+  const response = await fetch(`${API_BASE_URL}/polls/${route.params.id}/questions`, {
+    method: mode === 'create' ? 'POST' : 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      poll: editingQuestion.value!.poll,
+      answers: editingQuestion.value!.answers.map(item => item.text),
+    }),
+  })
+  questions.value = await response.json();
 };
+
+onMounted(() => getQuestions());
 </script>
 
 <template>

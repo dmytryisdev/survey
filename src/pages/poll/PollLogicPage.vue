@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
 import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import LogicModal from '~/components/modal/Logic.vue'
 import QuestionModel from '~/models/Question';
 import AnswerModel from '~/models/Answer';
 import Connection from '~/components/poll/logic/Connection.vue';
-import { fetchLogicQuestions } from '~/api/Logic.ts';
 import RelationshipModel from '~/models/Relationship';
+import { API_BASE_URL } from '~/config';
+const route = useRoute();
 
 const showModal = ref(false);
 const questions = ref<QuestionModel[]>([]);
@@ -17,7 +19,8 @@ const filteredQuestions = computed<QuestionModel[]>(() => {
 
 const getLogicQuestions = async () => {
   try {
-    questions.value = await fetchLogicQuestions();
+    const response = await fetch(`${API_BASE_URL}/polls/${route.params.id}/questions`)
+    questions.value = await response.json();
   } catch (error) {
     console.error(error);
   }
@@ -56,7 +59,7 @@ const handleCreateRelationship = (relationship: RelationshipModel) => {
   })
 }
 
-const handleSavePoll = () => {
+const handleSavePoll = async () => {
   try {
     const relationships = questions.value
       .filter(item => item.answers.find(answer => answer.nextQuestion))
@@ -69,7 +72,15 @@ const handleSavePoll = () => {
         });
       });
 
-    console.log('Submitting', relationships);
+    await fetch(`${API_BASE_URL}/polls/${route.params.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        relationships: relationships
+      }),
+    })
   } catch (err) {
     console.error(err);
   }
