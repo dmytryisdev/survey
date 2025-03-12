@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 
-defineProps<{
+interface TabsProps {
   data: {
     label: string;
     link: string;
   }[];
-}>();
+}
+
+defineProps<TabsProps>();
 
 const route = useRoute();
 </script>
@@ -17,7 +19,7 @@ const route = useRoute();
       v-for="tab in data"
       :key="tab.link"
       :class="{ 'bg-sky-100': tab.link === route.name }"
-      class="flex-1 text-center"
+      class="flex-1 text-center transition duration-100 ease-in-out hover:bg-sky-200"
     >
       <RouterLink :to="{ name: tab.link }" class="flex justify-center w-full h-full py-3">
         {{ tab.label }}

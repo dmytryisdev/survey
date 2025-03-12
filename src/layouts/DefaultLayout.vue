@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import Sidebar from '~/components/app/Sidebar.vue'
+import Button from 'primevue/button'
 
 const route = useRoute()
 const title = computed(() => {
@@ -16,12 +17,18 @@ const toggleSidebarHidden = () => {
 </script>
 
 <template>
-  <div class="flex h-full">
-    <button
-      class="absolute t-2 l-2 z-0 sm:hidden"
+  <div class="sm:hidden">
+    <Button
+      variant="text"
+      class="mt-6 ml-6"
       @click="toggleSidebarHidden"
-    >Toggle</button>
+    >
+      Меню
+    </Button>
+  </div>
 
+
+  <div class="flex h-full">
     <Sidebar v-model="isSidebarHidden"/>
 
     <main class="w-full m-6">

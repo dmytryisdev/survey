@@ -1,4 +1,4 @@
-import RoutesSurvey from './routes-survey.ts';
+import RoutesPoll from './routes-poll.ts';
 import RoutesUsers from './routes-users.ts';
 import RoutesBlacklist from './routes-blacklist.ts';
 
@@ -7,11 +7,11 @@ const routes = [
     path: '/',
     component: () => import('~/layouts/DefaultLayout.vue'),
     children: [
-      ...RoutesSurvey,
+      ...RoutesPoll,
       ...RoutesUsers,
       ...RoutesBlacklist
     ]
   },
 ]
 
-export default routes
+export default routes;
