@@ -5,11 +5,13 @@ import QuestionModal from '~/components/modal/Question.vue';
 import QuestionModel from '~/models/Question';
 import Loader from '~/components/app/Loader.vue';
 import Empty from '~/components/app/Empty.vue';
+import AnswerModel from '~/models/Answer';
 
 const route = useRoute();
 
 const isLoading = ref(true);
 const showModal = ref(false);
+const answersToDelete = ref<string[]>([]);
 const editingQuestion = ref<QuestionModel | null>(null);
 const questions = ref<QuestionModel[]>([]);
 
@@ -35,6 +37,7 @@ const editQuestion = (question: QuestionModel) => {
 
 const handleSaveQuestion = async (question: QuestionModel) => {
   try {
+    await AnswerModel.deleteAnswers(answersToDelete.value);
     const fetchedQuestion = await QuestionModel.saveQuestion(question, route.params.id as string);
     if (question.id) {
       questions.value.map(item => item.id === question.id ? fetchedQuestion : item)
@@ -43,6 +46,8 @@ const handleSaveQuestion = async (question: QuestionModel) => {
     }
   } catch (error) {
     console.error(error);
+  } finally {
+    answersToDelete.value = [];
   }
 };
 
@@ -52,6 +57,10 @@ const handleDeleteQuestion = async (question: QuestionModel) => {
   } catch (error) {
     console.error(error);
   }
+};
+
+const handleAddToDelete = async (id: string) => {
+  answersToDelete.value.push(id);
 };
 
 onMounted(() => { getQuestions(); });
@@ -80,7 +89,12 @@ onMounted(() => { getQuestions(); });
     </li>
   </ul>
 
-  <QuestionModal v-model="showModal" :question="editingQuestion" @save-question="handleSaveQuestion" />
+  <QuestionModal
+    v-model="showModal"
+    :question="editingQuestion"
+    @add-to-delete="handleAddToDelete"
+    @save-question="handleSaveQuestion"
+  />
 </template>
 
 <style scoped></style>

@@ -1,4 +1,5 @@
 import type QuestionModel from '~/models/Question';
+import { API_BASE_URL } from '~/config.ts';
 
 export default class AnswerModel {
   id: string;
@@ -13,5 +14,15 @@ export default class AnswerModel {
       this.question = data.question || null;
       this.next_question = data.next_question || null;
       this.nextQuestion = data.nextQuestion || null;
+  }
+
+  static async deleteAnswers(ids: string[]) {
+    await fetch(`${API_BASE_URL}/questions/`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(ids)
+    });
   }
 }
