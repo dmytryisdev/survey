@@ -56,6 +56,7 @@ const handleSaveQuestion = async (question: QuestionModel) => {
 const handleDeleteQuestion = async (question: QuestionModel) => {
   try {
     await QuestionModel.deleteQuestion(question);
+    questions.value = questions.value.filter(item => item.id !== question.id)
   } catch (error) {
     console.error(error);
   }
