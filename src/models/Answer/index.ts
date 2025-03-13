@@ -2,7 +2,7 @@ import type QuestionModel from '~/models/Question';
 import { API_BASE_URL } from '~/config.ts';
 
 export default class AnswerModel {
-  id: string;
+  id: string | null;
   text: string;
   nextQuestion: QuestionModel | null;
   next_question?: QuestionModel | null;

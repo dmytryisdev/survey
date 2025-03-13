@@ -26,32 +26,33 @@ const emit = defineEmits<{
   'add-to-delete': [id: string];
 }>();
 
-const defaultForm: FormData = {
-  id: null,
-  text: '',
-  answers: question?.answers
-    || [
-      new AnswerModel({ text: 'Да' }),
-      new AnswerModel({ text: 'Нет' }),
-      new AnswerModel({ text: 'Не знаю' })
-    ],
-};
+const createDefaultAnswers = () => [
+  new AnswerModel({ id: null, text: 'Да' }),
+  new AnswerModel({ id: null, text: 'Нет' }),
+  new AnswerModel({ id: null, text: 'Не знаю' })
+];
 
 const form = reactive<FormData>({
   id: null,
   text: '',
-  answers: [...defaultForm.answers],
+  answers: [],
 });
 
 const errorMessage = ref('');
 
 const isEditMode = computed(() => !!form.id);
 
-const initForm = async () => {
-  if (question) {
+const initForm = () => {
+  if (question && question.id) {
     form.id = question.id;
     form.text = question.text;
-    form.answers = question.answers && question.answers.length > 0 ? [...question.answers] : [...defaultForm.answers];
+
+    form.answers = question.answers && question.answers.length > 0
+      ? question.answers.map(answer => new AnswerModel({
+        id: answer.id,
+        text: answer.text
+      }))
+      : createDefaultAnswers();
   } else {
     resetForm();
   }
@@ -60,17 +61,19 @@ const initForm = async () => {
 const resetForm = () => {
   form.id = null;
   form.text = '';
-  form.answers = [...defaultForm.answers];
+  form.answers = createDefaultAnswers();
   errorMessage.value = '';
 };
 
 const addAnswer = () => {
-  form.answers.push(new AnswerModel());
+  form.answers.push(new AnswerModel({ id: null, text: '' }));
 };
 
 const removeAnswer = (index: number, id: string) => {
   form.answers.splice(index, 1);
-  emit('add-to-delete', id);
+  if (id) {
+    emit('add-to-delete', id);
+  }
 };
 
 const handleSubmit = () => {
@@ -89,7 +92,10 @@ const handleSubmit = () => {
 
   const questionData: Partial<QuestionModel> = {
     text: form.text,
-    answers: form.answers,
+    answers: form.answers.map(answer => new AnswerModel({
+      id: answer.id,
+      text: answer.text
+    })),
   };
 
   if (isEditMode.value && form.id) {
@@ -143,13 +149,13 @@ watch(
       <div class="field flex flex-col gap-1">
         <label for="question-text" class="font-bold">Введите текст вопроса</label>
         <div class="p-inputgroup flex gap-2">
-          <InputText 
-            id="question-text" 
-            v-model="form.text" 
-            class="w-full" 
-            :class="{'p-invalid': !form.text.trim() && errorMessage}" 
+          <InputText
+            id="question-text"
+            v-model="form.text"
+            class="w-full"
+            :class="{'p-invalid': !form.text.trim() && errorMessage}"
             :feedback="true"
-            placeholder="Введите текст вопроса" 
+            placeholder="Введите текст вопроса"
           />
         </div>
       </div>
@@ -173,7 +179,7 @@ watch(
           </div>
         </TransitionGroup>
       </div>
-      
+
       <div v-if="errorMessage" class="error-message mb-3">{{ errorMessage }}</div>
 
       <Button variant="text" @click="addAnswer">Добавить вариант ответа</Button>
