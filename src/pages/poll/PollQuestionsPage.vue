@@ -37,7 +37,9 @@ const editQuestion = (question: QuestionModel) => {
 
 const handleSaveQuestion = async (question: QuestionModel) => {
   try {
-    await AnswerModel.deleteAnswers(answersToDelete.value);
+    if (answersToDelete.value.length) {
+      await AnswerModel.deleteAnswers(answersToDelete.value);
+    }
     const fetchedQuestion = await QuestionModel.saveQuestion(question, route.params.id as string);
     if (question.id) {
       questions.value.map(item => item.id === question.id ? fetchedQuestion : item)
@@ -60,7 +62,9 @@ const handleDeleteQuestion = async (question: QuestionModel) => {
 };
 
 const handleAddToDelete = async (id: string) => {
-  answersToDelete.value.push(id);
+  if (answersToDelete.value) {
+    answersToDelete.value.push(id);
+  }
 };
 
 onMounted(() => { getQuestions(); });

@@ -17,7 +17,7 @@ export default class AnswerModel {
   }
 
   static async deleteAnswers(ids: string[]) {
-    await fetch(`${API_BASE_URL}/questions/`, {
+    await fetch(`${API_BASE_URL}/answers/`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
