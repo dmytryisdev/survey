@@ -36,7 +36,8 @@ const createPoll = () => {
 
 const handleCreatePoll = async (poll: PollModel) => {
   try {
-    list.value = await PollModel.createPoll(poll.title);
+    const fetchedPoll = await PollModel.createPoll(poll.title)
+    list.value.push(fetchedPoll);
   } catch (err) {
     console.error(err);
   }

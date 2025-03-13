@@ -37,19 +37,23 @@ export default class QuestionModel {
   }
 
   static async getQuestions(pollId: string) {
-    const response = await fetch(`${API_BASE_URL}/polls/${pollId}/questions`);
+    const response = await fetch(`${API_BASE_URL}/polls/${pollId}/questions/`);
     const data = await response.json();
     return data.map((question: any) => QuestionModel.fromApi(question));
   }
 
-  static async saveQuestion(pollId: string, question: QuestionModel) {
+  static async saveQuestion(question: QuestionModel, pollId: string) {
     const method = question.id ? 'PUT' : 'POST';
-    const response = await fetch(`${API_BASE_URL}/polls/${pollId}/questions`, {
+    const response = await fetch(`${API_BASE_URL}/questions/` + (question.id ? `${question.id}/` : ''), {
       method,
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(question),
+      body: JSON.stringify({
+        text: question.text,
+        poll: pollId,
+        answers: question.answers.map((answer: AnswerModel) => ({ text: answer.text })),
+      }),
     });
     const data = await response.json();
     return data.map((q: any) => QuestionModel.fromApi(q));

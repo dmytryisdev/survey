@@ -15,7 +15,7 @@ export default class RelationshipModel {
   }
 
   static async updateRelationships(id: string, relationships: RelationshipModel[]) {
-    await fetch(`${API_BASE_URL}/polls/${id}`, {
+    await fetch(`${API_BASE_URL}/polls/${id}/`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'

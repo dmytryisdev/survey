@@ -35,7 +35,7 @@ const editQuestion = (question: QuestionModel) => {
 
 const handleSaveQuestion = async (question: QuestionModel) => {
   try {
-    questions.value = await QuestionModel.saveQuestion(route.params.id as string, question);
+    questions.value = await QuestionModel.saveQuestion(question, route.params.id as string);
   } catch (error) {
     console.error(error);
   }
