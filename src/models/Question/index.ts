@@ -58,4 +58,10 @@ export default class QuestionModel {
     const data = await response.json();
     return QuestionModel.fromApi(data);
   }
+
+  static async deleteQuestion(question: QuestionModel) {
+    await fetch(`${API_BASE_URL}/questions/${question.id}/`, {
+      method: 'DELETE',
+    });
+  }
 }

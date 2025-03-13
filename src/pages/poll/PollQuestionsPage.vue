@@ -46,6 +46,14 @@ const handleSaveQuestion = async (question: QuestionModel) => {
   }
 };
 
+const handleDeleteQuestion = async (question: QuestionModel) => {
+  try {
+    await QuestionModel.deleteQuestion(question);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 onMounted(() => { getQuestions(); });
 </script>
 
@@ -65,7 +73,10 @@ onMounted(() => { getQuestions(); });
       class="flex justify-between items-center p-3 border-b-2 border-b-gray-100"
     >
       <span>{{ index + 1 }}. {{ question.text }}</span>
-      <button class="cursor-pointer" @click="editQuestion(question)">Редактировать</button>
+      <div class="flex items-center gap-2">
+        <button class="cursor-pointer" @click="editQuestion(question)">Редактировать</button>
+        <button class="cursor-pointer" @click="handleDeleteQuestion(question)">Удалить</button>
+      </div>
     </li>
   </ul>
 
