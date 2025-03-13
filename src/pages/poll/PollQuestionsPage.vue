@@ -63,7 +63,7 @@ const handleDeleteQuestion = async (question: QuestionModel) => {
 };
 
 const handleAddToDelete = async (id: string) => {
-  if (answersToDelete.value) {
+  if (id) {
     answersToDelete.value.push(id);
   }
 };
