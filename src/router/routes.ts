@@ -5,6 +5,7 @@ import RoutesBlacklist from './routes-blacklist.ts';
 const routes = [
   {
     path: '/',
+    redirect: '/poll',
     component: () => import('~/layouts/DefaultLayout.vue'),
     children: [
       ...RoutesPoll,
