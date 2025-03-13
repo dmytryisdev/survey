@@ -39,6 +39,16 @@ export default class PollModel {
     return PollModel.fromApi(data);
   }
 
+  static async updatePoll(id: string, title: string) {
+     await fetch(`${API_BASE_URL}/polls/${id}/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ title }),
+    });
+  }
+
   static async removePoll(id: string) {
     await fetch(`${API_BASE_URL}/polls/${id}/`, {
       method: 'DELETE',

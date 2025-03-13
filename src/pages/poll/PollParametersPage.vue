@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { reactive } from 'vue';
+import { useRoute } from 'vue-router';
 import { Form } from '@primevue/forms';
 import Message from 'primevue/message';
 import InputText from 'primevue/inputtext';
@@ -8,6 +9,8 @@ import Select from 'primevue/select';
 import RadioButton from 'primevue/radiobutton';
 import RadioButtonGroup from 'primevue/radiobuttongroup';
 import Button from 'primevue/button';
+import PollModel from '~/models/Poll';
+const route = useRoute()
 
 const initialValues = reactive({
   name: '',
@@ -42,9 +45,13 @@ const resolver = ({ values }: any) => {
   };
 };
 
-const onFormSubmit = ({ valid, states }: { valid: boolean, states: any }) => {
+const onFormSubmit = async ({ valid, states }: { valid: boolean, states: any }) => {
   if (valid) {
-    console.log('Submitting', states);
+    try {
+      await PollModel.updatePoll(route.params.id as string, states.name.value);
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
 </script>
