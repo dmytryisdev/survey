@@ -16,6 +16,7 @@ const showModal = ref(false);
 const questions = ref<QuestionModel[]>([]);
 
 const filteredQuestions = computed<QuestionModel[]>(() => {
+  console.log(questions.value)
   return questions.value.filter(item => item.answers.find(answer => answer.nextQuestion));
 });
 

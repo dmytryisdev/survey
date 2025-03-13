@@ -26,12 +26,12 @@ export default class QuestionModel {
       answers: data.answers?.map((answer: AnswerModel) => ({
         id: answer.id,
         text: answer.text,
-        nextQuestion: answer.nextQuestion
+        nextQuestion: answer.next_question
       })) || [],
       from_answers: data.from_answers?.map((answer: AnswerModel) => ({
         id: answer.id,
         text: answer.text,
-        nextQuestion: answer.nextQuestion
+        nextQuestion: answer.next_question
       })) || []
     });
   }
@@ -56,6 +56,6 @@ export default class QuestionModel {
       }),
     });
     const data = await response.json();
-    return data.map((q: any) => QuestionModel.fromApi(q));
+    return QuestionModel.fromApi(data);
   }
 }

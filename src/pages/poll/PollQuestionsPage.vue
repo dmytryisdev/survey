@@ -35,7 +35,12 @@ const editQuestion = (question: QuestionModel) => {
 
 const handleSaveQuestion = async (question: QuestionModel) => {
   try {
-    questions.value = await QuestionModel.saveQuestion(question, route.params.id as string);
+    const fetchedQuestion = await QuestionModel.saveQuestion(question, route.params.id as string);
+    if (question.id) {
+      questions.value.map(item => item.id === question.id ? fetchedQuestion : item)
+    } else {
+      questions.value.push(fetchedQuestion);
+    }
   } catch (error) {
     console.error(error);
   }

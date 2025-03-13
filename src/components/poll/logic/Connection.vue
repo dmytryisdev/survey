@@ -49,8 +49,8 @@ const changeNextQuestion = (nextQuestionId: string, questionId: string) => {
       <div v-for="answer in question.answers" class="flex items-center gap-2">
         <RadioButton
           v-model="selectedAnswer"
-          :inputId="answer.id"
-          :name="question.id"
+          :inputId="String(answer.id)"
+          :name="String(question.id)"
           :value="answer.id"
           @change="changeAnswer(answer, question.id)"
         ></RadioButton>

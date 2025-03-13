@@ -27,12 +27,12 @@ const questionsOptions = computed(() => {
   return questions
     .filter(item => item.id !== selectedNextQuestion.value?.id)
     .filter(item => !filteredQuestions.includes(item))
-    .map(item => { return { id: item.id, name: item.text, value: item.id } });
+    .map(item => { return { id: item.id, name: item.text, value: item.id, answers: item.answers } });
 });
 
 const questionsNextOptions = computed(() => {
   return questions
-    .map(item => { return { id: item.id, name: item.text, value: item.id } })
+    .map(item => { return { id: item.id, name: item.text, value: item.id, answers: item.answers } })
     .filter(item => item.id !== selectedQuestion.value?.id);
 });
 
@@ -133,8 +133,8 @@ const resetFields = () => {
           <div v-for="answer in answersOptions.answers" class="flex items-center gap-2">
             <RadioButton
               v-model="selectedAnswer"
-              :inputId="'modal' + answer.id"
-              :name="answersOptions.id"
+              :inputId="'modal' + String(answer.id)"
+              :name="String(answersOptions.id)"
               :value="answer.id"
               @click="toggleRadioButton(answer.id)"
             />
