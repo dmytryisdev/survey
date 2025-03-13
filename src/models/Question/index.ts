@@ -50,7 +50,6 @@ export default class QuestionModel {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        ...(question.id && { id: question.id }),
         text: question.text,
         poll: pollId,
         answers: question.answers.map((answer: AnswerModel) => ({
