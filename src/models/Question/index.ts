@@ -52,7 +52,10 @@ export default class QuestionModel {
       body: JSON.stringify({
         text: question.text,
         poll: pollId,
-        answers: question.answers.map((answer: AnswerModel) => ({ text: answer.text })),
+        answers: question.answers.map((answer: AnswerModel) => ({
+          ...(answer.id && { id: answer.id }),
+          text: answer.text
+        })),
       }),
     });
     const data = await response.json();

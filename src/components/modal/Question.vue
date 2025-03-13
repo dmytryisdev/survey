@@ -29,7 +29,12 @@ const emit = defineEmits<{
 const defaultForm: FormData = {
   id: null,
   text: '',
-  answers: [new AnswerModel({ text: 'Да' }), new AnswerModel({ text: 'Нет' }), new AnswerModel({ text: 'Не знаю' })],
+  answers: question?.answers
+    || [
+      new AnswerModel({ text: 'Да' }),
+      new AnswerModel({ text: 'Нет' }),
+      new AnswerModel({ text: 'Не знаю' })
+    ],
 };
 
 const form = reactive<FormData>({
