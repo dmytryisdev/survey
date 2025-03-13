@@ -22,7 +22,7 @@ export default class AnswerModel {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(ids)
+      body: JSON.stringify({ "ids": ids })
     });
   }
 }
