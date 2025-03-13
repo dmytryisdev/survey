@@ -5,11 +5,13 @@ import QuestionModal from '~/components/modal/Question.vue';
 import QuestionModel from '~/models/Question';
 import Loader from '~/components/app/Loader.vue';
 import Empty from '~/components/app/Empty.vue';
+import AnswerModel from '~/models/Answer';
 
 const route = useRoute();
 
 const isLoading = ref(true);
 const showModal = ref(false);
+const answersToDelete = ref<string[]>([]);
 const editingQuestion = ref<QuestionModel | null>(null);
 const questions = ref<QuestionModel[]>([]);
 
@@ -35,6 +37,9 @@ const editQuestion = (question: QuestionModel) => {
 
 const handleSaveQuestion = async (question: QuestionModel) => {
   try {
+    if (answersToDelete.value.length) {
+      await AnswerModel.deleteAnswers(answersToDelete.value);
+    }
     const fetchedQuestion = await QuestionModel.saveQuestion(question, route.params.id as string);
     if (question.id) {
       questions.value.map(item => item.id === question.id ? fetchedQuestion : item)
@@ -43,6 +48,23 @@ const handleSaveQuestion = async (question: QuestionModel) => {
     }
   } catch (error) {
     console.error(error);
+  } finally {
+    answersToDelete.value = [];
+  }
+};
+
+const handleDeleteQuestion = async (question: QuestionModel) => {
+  try {
+    await QuestionModel.deleteQuestion(question);
+    questions.value = questions.value.filter(item => item.id !== question.id)
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const handleAddToDelete = async (id: string) => {
+  if (id) {
+    answersToDelete.value.push(id);
   }
 };
 
@@ -65,11 +87,19 @@ onMounted(() => { getQuestions(); });
       class="flex justify-between items-center p-3 border-b-2 border-b-gray-100"
     >
       <span>{{ index + 1 }}. {{ question.text }}</span>
-      <button class="cursor-pointer" @click="editQuestion(question)">Редактировать</button>
+      <div class="flex items-center gap-2">
+        <button class="cursor-pointer" @click="editQuestion(question)">Редактировать</button>
+        <button class="cursor-pointer" @click="handleDeleteQuestion(question)">Удалить</button>
+      </div>
     </li>
   </ul>
 
-  <QuestionModal v-model="showModal" :question="editingQuestion" @save-question="handleSaveQuestion" />
+  <QuestionModal
+    v-model="showModal"
+    :question="editingQuestion"
+    @add-to-delete="handleAddToDelete"
+    @save-question="handleSaveQuestion"
+  />
 </template>
 
 <style scoped></style>

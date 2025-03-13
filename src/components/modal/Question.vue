@@ -21,12 +21,20 @@ const showModal = defineModel<boolean>();
 
 const { question = new QuestionModel() } = defineProps<QuestionModelProps>();
 
-const emit = defineEmits<{ 'save-question': [question: QuestionModel]; }>();
+const emit = defineEmits<{
+  'save-question': [question: QuestionModel];
+  'add-to-delete': [id: string];
+}>();
 
 const defaultForm: FormData = {
   id: null,
   text: '',
-  answers: [new AnswerModel({ text: 'Да' }), new AnswerModel({ text: 'Нет' }), new AnswerModel({ text: 'Не знаю' })],
+  answers: question?.answers
+    || [
+      new AnswerModel({ text: 'Да' }),
+      new AnswerModel({ text: 'Нет' }),
+      new AnswerModel({ text: 'Не знаю' })
+    ],
 };
 
 const form = reactive<FormData>({
@@ -60,8 +68,9 @@ const addAnswer = () => {
   form.answers.push(new AnswerModel());
 };
 
-const removeAnswer = (index: number) => {
+const removeAnswer = (index: number, id: string) => {
   form.answers.splice(index, 1);
+  emit('add-to-delete', id);
 };
 
 const handleSubmit = () => {
@@ -148,7 +157,7 @@ watch(
       <div class="flex flex-col gap-1">
         <label for="question-text mb-1" class="font-bold">Варианты ответа</label>
         <TransitionGroup name="list" tag="div" class="answer-list">
-          <div v-for="(_, index) in form.answers" :key="`answer-${index}`" class="field mb-2 answer-item">
+          <div v-for="(answer, index) in form.answers" :key="`answer-${index}`" class="field mb-2 answer-item">
             <div class="p-inputgroup">
               <div class="p-inputgroup flex gap-2">
                 <InputText
@@ -158,7 +167,7 @@ watch(
                   :feedback="true"
                   placeholder="Вариант ответа"
                 />
-                <Button icon="pi pi-trash" variant="text" class="p-button-danger" @click="removeAnswer(index)" />
+                <Button icon="pi pi-trash" variant="text" class="p-button-danger" @click="removeAnswer(index, answer.id)" />
               </div>
             </div>
           </div>

@@ -16,7 +16,6 @@ const showModal = ref(false);
 const questions = ref<QuestionModel[]>([]);
 
 const filteredQuestions = computed<QuestionModel[]>(() => {
-  console.log(questions.value)
   return questions.value.filter(item => item.answers.find(answer => answer.nextQuestion));
 });
 
@@ -103,7 +102,7 @@ onMounted( () => getLogicQuestions())
       />
     </ul>
 
-    <Empty v-if="!questions.length"/>
+    <Empty v-if="!filteredQuestions.length"/>
 
     <Button class="max-w-104" @click="handleSavePoll">Cохранить изменения</Button>
   </div>
